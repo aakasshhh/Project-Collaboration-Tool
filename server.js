@@ -10,6 +10,32 @@ const configurePassport = require('./backend/config/passport');
 
 dotenv.config();
 
+//const emailService = require('./services/emailService');
+
+
+// routes
+const authRoutes = require('./backend/routes/auth.routes');
+const teamRoutes = require('./backend/routes/team.routes');
+//const projectRoutes = require('./routes/project.routes');
+//const taskRoutes = require('./routes/task.routes');
+const activityRoutes = require('./backend/routes/activity.routes');
+
+dotenv.config();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const PORT = process.env.PORT || 8000;
 
