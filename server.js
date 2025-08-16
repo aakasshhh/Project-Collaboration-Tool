@@ -16,27 +16,54 @@ dotenv.config();
 // routes
 const authRoutes = require('./backend/routes/auth.routes');
 const teamRoutes = require('./backend/routes/team.routes');
-//const projectRoutes = require('./routes/project.routes');
+const projectRoutes = require('./backend/routes/project.routes');
 //const taskRoutes = require('./routes/task.routes');
 const activityRoutes = require('./backend/routes/activity.routes');
 
 dotenv.config();
 
+const app = express();
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: process.env.CLIENT_URL?.split(',') || '*',
+    credentials: true
+  }
+});
 
+app.use((req, _, next) => {
+  req.io = io;
+  // MAKE EMAIL SERVICE AVAILABLE IN ALL ROUTES - NEW
+  req.emailService = emailService;
+  next();
+});
 
+app.use(cors());
+app.use(express.json());
 
+app.get('/', (_, res) => res.json({ status: 'ok' }));
 
+// Passport
+app.use(passport.initialize());
+configurePassport(passport, process.env.JWT_SECRET);
 
+// API routes
+app.use('/api/auth', authRoutes);
+app.use('/api/teams', teamRoutes);
+app.use('/api/projects', projectRoutes);
+// app.use('/api/tasks', taskRoutes);
+app.use('/api/activity', activityRoutes);
 
+// 404 handler
+app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 
+// error handler
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ message: 'Server error' });
+});
 
-
-
-
-
-
-
-
+// DB + Socket
 const PORT = process.env.PORT || 8000;
 
 (async () => {
