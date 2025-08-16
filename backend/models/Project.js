@@ -1,6 +1,6 @@
 const { Schema: SchemaP, model: modelP } = require('mongoose');
 
-const projectSchema = new SchemaP(
+const projectSchema =  new SchemaP(
   {
     name: { type: String, required: true },
     description: { type: String },
