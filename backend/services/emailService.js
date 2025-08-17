@@ -11,7 +11,7 @@ class EmailService {
     console.log('Initializing email service...');
     console.log('USERNAME:', process.env.EMAIL_USERNAME ? 'Set' : 'Not set');
     console.log('SERVER:', process.env.EMAIL_SERVER);
-    console.log('PORT:', process.env.EMAIL_PORT);
+    console.log('PORT:',process.env.EMAIL_PORT);
 
     if (!process.env.EMAIL_USERNAME || !process.env.EMAIL_PASSWORD) {
       console.log('EMAIL_USERNAME or EMAIL_PASSWORD not configured - email service disabled');
