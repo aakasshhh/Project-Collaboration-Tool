@@ -17,8 +17,7 @@ dotenv.config();
 const authRoutes = require('./backend/routes/auth.routes');
 const teamRoutes = require('./backend/routes/team.routes');
 const projectRoutes = require('./backend/routes/project.routes');
-const taskRoutes = require('./backend/routes/task.routes');
-const taskRoutes = require('./backend/routes/task.routes');
+//const taskRoutes = require('./routes/task.routes');
 const activityRoutes = require('./backend/routes/activity.routes');
 
 dotenv.config();
@@ -52,8 +51,7 @@ configurePassport(passport, process.env.JWT_SECRET);
 app.use('/api/auth', authRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/projects', projectRoutes);
-app.use('/api/tasks', taskRoutes);
-app.use('/api/tasks', taskRoutes);
+// app.use('/api/tasks', taskRoutes);
 app.use('/api/activity', activityRoutes);
 
 // 404 handler
@@ -80,10 +78,6 @@ const PORT = process.env.PORT || 8000;
   }
   
   server.listen(PORT, () => {
-    console.log(Server listening on : ${PORT});
-    console.log(Email service configured for: ${process.env.EMAIL_USERNAME});
-  });
-})();
     console.log(`Server listening on : ${PORT}`);
     console.log(`Email service configured for: ${process.env.EMAIL_USERNAME}`);
   });
