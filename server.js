@@ -4,21 +4,20 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const passport = require('passport');
 const { Server } = require('socket.io');
-const connectDB = require('./backend/config/db');
-const configurePassport = require('./backend/config/passport');
-//const { registerSocket } = require('./utils/socket');
+const connectDB = require('./config/db');
+const configurePassport = require('./config/passport');
+const { registerSocket } = require('./utils/socket');
 
 dotenv.config();
 
-//const emailService = require('./services/emailService');
-
+const emailService = require('./services/emailService');
 
 // routes
-const authRoutes = require('./backend/routes/auth.routes');
-const teamRoutes = require('./backend/routes/team.routes');
-const projectRoutes = require('./backend/routes/project.routes');
-//const taskRoutes = require('./routes/task.routes');
-const activityRoutes = require('./backend/routes/activity.routes');
+const authRoutes = require('./routes/auth.routes');
+const teamRoutes = require('./routes/team.routes');
+const projectRoutes = require('./routes/project.routes');
+const taskRoutes = require('./routes/task.routes');
+const activityRoutes = require('./routes/activity.routes');
 
 dotenv.config();
 
@@ -33,7 +32,6 @@ const io = new Server(server, {
 
 app.use((req, _, next) => {
   req.io = io;
-  // MAKE EMAIL SERVICE AVAILABLE IN ALL ROUTES - NEW
   req.emailService = emailService;
   next();
 });
@@ -43,6 +41,7 @@ app.use(express.json());
 
 app.get('/', (_, res) => res.json({ status: 'ok' }));
 
+
 // Passport
 app.use(passport.initialize());
 configurePassport(passport, process.env.JWT_SECRET);
@@ -51,19 +50,18 @@ configurePassport(passport, process.env.JWT_SECRET);
 app.use('/api/auth', authRoutes);
 app.use('/api/teams', teamRoutes);
 app.use('/api/projects', projectRoutes);
-// app.use('/api/tasks', taskRoutes);
+app.use('/api/tasks', taskRoutes);
 app.use('/api/activity', activityRoutes);
 
-// 404 handler
 app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 
-// error handler
+// error handling
 app.use((err, req, res, next) => {
   console.error(err);
   res.status(500).json({ message: 'Server error' });
 });
 
-// DB + Socket
+// Database and socket 
 const PORT = process.env.PORT || 8000;
 
 (async () => {
