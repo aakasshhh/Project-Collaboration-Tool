@@ -24,6 +24,7 @@ exports.createTask = async (req, res) => {
     });
 
     
+    // Email + Socket notifications
     const users = await User.find({ _id: { $in: assignedUsers } });
     for (const u of users) {
       req.emailService.sendTaskAssignmentEmail(u.email, u.name, title, 'Project Name').catch(() => {});
@@ -58,6 +59,7 @@ exports.updateTask = async (req, res) => {
     });
 
     
+   // Notify assigned users -> status changed
     if (updates.status && updates.status !== before.status) {
       const assigned = task.assignedUsers.map(String);
 

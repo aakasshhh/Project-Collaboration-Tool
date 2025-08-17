@@ -1,7 +1,7 @@
 const Project = require('../models/Project');
 const Activity = require('../models/ActivityLog');
 
-exports.createProject = async (req, res) => {
+exports.createProject =  async (req, res) => {
   try {
     const { name, description, teamId } = req.body;
     const project = await Project.create({
