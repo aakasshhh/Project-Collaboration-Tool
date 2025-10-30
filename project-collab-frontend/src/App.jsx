@@ -13,7 +13,6 @@ function PrivateRoute({ children }) {
   if (!user) return <Navigate to="/login" />;
   return children;
 }
-
 export default function App() {
   return (
     <div className="min-h-screen bg-gray-50">
