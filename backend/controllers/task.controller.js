@@ -24,7 +24,6 @@ exports.createTask = async (req, res) => {
       task: task._id,
     });
 
-    // Notify assigned users via email and socket
     if (assignedUsers.length > 0) {
       const users = await User.find({ _id: { $in: assignedUsers } });
 
@@ -68,7 +67,6 @@ exports.updateTask = async (req, res) => {
       task: task._id,
     });
 
-    // Notify assigned users if status changed
     if (updates.status && updates.status !== before.status) {
       const assigned = task.assignedUsers.map(String);
 
@@ -96,7 +94,7 @@ exports.updateTask = async (req, res) => {
 exports.assignUsers = async (req, res) => {
   try {
     const { taskId } = req.params;
-    const { identifiers = [] } = req.body; // can be emails or usernames
+    const { identifiers = [] } = req.body; 
 
     if (!Array.isArray(identifiers) || identifiers.length === 0) {
       return res
@@ -104,7 +102,6 @@ exports.assignUsers = async (req, res) => {
         .json({ message: 'Please provide at least one email or username' });
     }
 
-    // Find users by email or username
     const users = await User.find({
       $or: [{ email: { $in: identifiers } }, { name: { $in: identifiers } }],
     });
@@ -117,7 +114,6 @@ exports.assignUsers = async (req, res) => {
 
     const userIds = users.map((u) => u._id);
 
-    // Assign found users to the task
     const task = await Task.findByIdAndUpdate(
       taskId,
       { $addToSet: { assignedUsers: { $each: userIds } } },
@@ -126,7 +122,6 @@ exports.assignUsers = async (req, res) => {
 
     if (!task) return res.status(404).json({ message: 'Task not found' });
 
-    // Log the assignment
     await ActivityL.create({
       action: 'task:assign',
       message: `Assigned users to task`,
@@ -135,7 +130,6 @@ exports.assignUsers = async (req, res) => {
       task: task._id,
     });
 
-    // Notify users
     for (const u of users) {
       req.emailService
         .sendTaskAssignmentEmail(u.email, u.name, task.title, 'Project Name')

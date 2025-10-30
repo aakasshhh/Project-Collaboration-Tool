@@ -11,7 +11,7 @@ class EmailService {
     console.log('Initializing email service...');
     console.log('USERNAME:', process.env.EMAIL_USERNAME ? 'Set' : 'Not set');
     console.log('SERVER:', process.env.EMAIL_SERVER);
-    console.log('PORT:',process.env.EMAIL_PORT);
+    console.log('PORT:', process.env.EMAIL_PORT);
 
     if (!process.env.EMAIL_USERNAME || !process.env.EMAIL_PASSWORD) {
       console.log('EMAIL_USERNAME or EMAIL_PASSWORD not configured - email service disabled');
@@ -151,6 +151,22 @@ class EmailService {
       to: email,
       subject: `Task Status Updated: ${taskTitle}`,
       html: this.baseTemplate('Task Status Updated', content)
+    });
+  }
+
+  async sendTeamJoinNotification(email, userName, teamName) {
+    const content = `
+      <p>Hi <strong>${userName}</strong>,</p>
+      <p>You've been added to the team <strong>${teamName}</strong>.</p>
+      <p>Log in to your dashboard to view your team's projects and collaborate with your teammates.</p>
+      <p>We're glad to have you on board!</p>
+      <p>Best regards,<br><strong>The Project Collaboration Team</strong></p>
+    `;
+
+    return await this.sendEmail({
+      to: email,
+      subject: `You've been added to team ${teamName}`,
+      html: this.baseTemplate('Welcome to Your New Team!', content)
     });
   }
 }

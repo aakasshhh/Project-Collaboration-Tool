@@ -10,8 +10,12 @@ export default function ActivityFeed({ projectId, team }) {
 
   async function fetch() {
     try {
-      const res = await api.get('/activity', { params: projectId ? { projectId } : {} });
-      setActs(res.data.slice(0, 10));
+      // const res = await api.get('/activity', { params: projectId ? { projectId } : {} });
+      // setActs(res.data.slice(0, 10));
+      const params = {};
+      if (projectId) params.projectId = projectId;
+      if (team?._id) params.teamId = team._id;
+      const res = await api.get('/activity', { params });
     } catch (err) {
       console.error(err);
     }

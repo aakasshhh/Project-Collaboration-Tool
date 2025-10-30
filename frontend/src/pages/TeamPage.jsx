@@ -22,20 +22,21 @@ export default function TeamPage() {
   }
 
   async function addMember(e) {
-    e.preventDefault();
-    try {
-      // backend expects userId — we only have email; ideally backend route accepts email or frontend resolves user id elsewhere.
-      // For quick flow, assume we have an endpoint to invite by email — but backend currently expects userId.
-      // So UI will call an API you'll add later or backend admin can add. For now show the call:
-      const userId = prompt('Paste userId to add (or implement lookup in backend to accept email)');
-      if (!userId) return;
-      await api.post(`/teams/${teamId}/members`, { userId });
-      alert('Added');
-      fetchTeam();
-    } catch (err) {
-      alert(err.response?.data?.message || 'Failed to add member');
-    }
+  e.preventDefault();
+  try {
+    const input = prompt('Enter email(s) or username(s), comma-separated:');
+    if (!input) return;
+
+    const identifiers = input.split(',').map(x => x.trim()).filter(Boolean);
+    const res = await api.post(`/teams/${teamId}/members`, { identifiers });
+
+    alert(res.data.message || 'Members added successfully');
+    fetchTeam();
+  } catch (err) {
+    alert(err.response?.data?.message || 'Failed to add member');
   }
+}
+
 
   if (!team) return <div className="card">Loading...</div>;
 
@@ -49,7 +50,8 @@ export default function TeamPage() {
         </ul>
       </div>
       <form onSubmit={addMember}>
-        <button className="bg-indigo-600 text-white py-1 px-3 rounded">Add member (userId)</button>
+        <button className="bg-indigo-600 text-white py-1 px-3 rounded">Add member (email or username)</button>
+
       </form>
     </div>
   );
