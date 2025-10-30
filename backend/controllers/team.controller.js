@@ -27,28 +27,66 @@ exports.createTeam = async (req, res) => {
 exports.addMember = async (req, res) => {
   try {
     const { teamId } = req.params;
-    const { userId } = req.body;
+    const { identifiers = [] } = req.body;
+
+    if (!Array.isArray(identifiers) || identifiers.length === 0) {
+      return res
+        .status(400)
+        .json({ message: 'Please provide at least one email or username' });
+    }
 
     const team = await Team.findById(teamId);
     if (!team) return res.status(404).json({ message: 'Team not found' });
 
-    if (!team.members.includes(userId)) {
-      team.members.push(userId);
-      await team.save();
+    const users = await UserModel.find({
+      $or: [
+        { email: { $in: identifiers } },
+        { name: { $in: identifiers } }
+      ]
+    });
+
+    if (users.length === 0) {
+      return res
+        .status(404)
+        .json({ message: 'No matching users found for given identifiers' });
     }
 
-    await UserModel.findByIdAndUpdate(userId, { $addToSet: { teams: teamId } });
+    const userIds = users.map((u) => u._id);
+
+    for (const id of userIds) {
+      if (!team.members.includes(id)) {
+        team.members.push(id);
+        await UserModel.findByIdAndUpdate(id, { $addToSet: { teams: teamId } });
+      }
+    }
+
+    await team.save();
 
     await ActivityLog.create({
       action: 'team:add_member',
-      message: `Added user ${userId} to team`,
+      message: `Added ${users.map((u) => u.name).join(', ')} to team`,
       user: req.user._id,
       team: teamId
     });
 
-    res.json(team);
+    for (const u of users) {
+      req.emailService
+        .sendTeamJoinNotification(u.email, u.name, team.name)
+        .catch(() => {});
+    }
+
+    res.json({
+      message: `Added ${users.map((u) => u.name).join(', ')} to the team successfully!`,
+      addedMembers: users.map((u) => ({
+        id: u._id,
+        name: u.name,
+        email: u.email
+      })),
+      team
+    });
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    console.error('Error adding member:', err);
+    res.status(500).json({ message: 'Error adding member' });
   }
 };
 

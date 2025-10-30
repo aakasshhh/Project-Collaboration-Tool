@@ -19,8 +19,6 @@ const projectRoutes = require('./routes/project.routes');
 const taskRoutes = require('./routes/task.routes');
 const activityRoutes = require('./routes/activity.routes');
 
-dotenv.config();
-
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server, {
@@ -57,9 +55,10 @@ app.use((req, res) => res.status(404).json({ message: 'Route not found' }));
 
 // error handling
 app.use((err, req, res, next) => {
-  console.error(err);
-  res.status(500).json({ message: 'Server error' });
+  console.error('Error:', err.message);
+  res.status(500).json({ message: err.message || 'Server error' });
 });
+
 
 // Database and socket 
 const PORT = process.env.PORT || 8000;
