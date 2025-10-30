@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="font-semibold text-lg text-indigo-600">ProjectCollab</Link>
+        <Link to="/" className="font-semibold text-lg text-indigo-600">Project Collaboration Tool</Link>
         <div className="flex items-center gap-4">
           {user ? (
             <>
