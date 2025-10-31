@@ -16,11 +16,10 @@ function PrivateRoute({ children }) {
 }
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 ">
       <Navbar />
-      <div className="container mx-auto">
+      <div className="container mx-auto py-4">
         <Routes>
-          <Route path='/' element={<HomePage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route
