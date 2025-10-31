@@ -8,7 +8,7 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="font-semibold text-lg text-indigo-600">Project Collaboration Tool</Link>
+        <Link to="/" className="font-semibold text-lg text-indigo-600">Collabify</Link>
         <div className="flex items-center gap-4">
           {user ? (
             <>
@@ -18,8 +18,8 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <Link to="/login" className="text-sm px-3 py-1 rounded-md hover:bg-gray-100">Login</Link>
-              <Link to="/signup" className="text-sm px-3 py-1 bg-indigo-600 text-white rounded-md">Sign up</Link>
+              <Link to="/login" className="text-sm px-3 py-1 rounded-md hover:bg-gray-200">Login</Link>
+              <Link to="/signup" className="text-sm px-3 py-1 bg-indigo-600 hover:bg-indigo-800 text-white rounded-md">Sign up</Link>
             </>
           )}
         </div>
