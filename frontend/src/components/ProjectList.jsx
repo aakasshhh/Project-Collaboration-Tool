@@ -59,7 +59,7 @@ export default function ProjectList({ projects, team, refresh }) {
         />
         <button
           disabled={loading}
-          className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50"
+          className="bg-indigo-600 hover:bg-indigo-700 hover:cursor-pointer text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50"
         >
           <FolderPlus className="w-4 h-4" />
           {loading ? "Creating..." : "New Project"}

@@ -83,8 +83,8 @@ export default function TaskCard({ task, refresh }) {
         </p>
 
         <div className="flex flex-col gap-1 text-xs text-gray-400 mt-2">
-          <span className="flex items-center gap-2">
-            <UserPlus className="w-3 h-3 text-indigo-400" />
+          <span className="flex items-center gap-2 ">
+            <UserPlus className="w-3 h-3 text-indigo-400 hover:cursor-pointer" />
             Assigned:{" "}
             <span className="text-gray-300">
               {task.assignedUsers?.map((u) => u.name).join(", ") || "—"}
@@ -125,7 +125,7 @@ export default function TaskCard({ task, refresh }) {
         <button
           onClick={assignUser}
           disabled={loading}
-          className="text-sm px-3 py-1 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-lg transition-all duration-150 flex items-center gap-1 disabled:opacity-50"
+          className="text-sm px-3 py-1 bg-linear-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 hover:cursor-pointer text-white rounded-lg transition-all duration-150 flex items-center gap-1 disabled:opacity-50"
         >
           <UserPlus className="w-4 h-4" />
           Assign

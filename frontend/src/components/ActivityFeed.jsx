@@ -36,9 +36,9 @@ export default function ActivityFeed({ projectId, team }) {
       </div>
 
       {loading ? (
-        <div className="text-sm text-gray-400 animate-pulse">Loading activity...</div>
+        <div className="text-sm text-black animate-pulse">Loading activity...</div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 text-black">
           <AnimatePresence>
             {acts.length > 0 ? (
               acts.map((a) => (
@@ -48,11 +48,11 @@ export default function ActivityFeed({ projectId, team }) {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.2 }}
-                  className="relative pl-5 border-l border-white/10"
+                  className="relative pl-5 border-l border-white/10 text-black"
                 >
-                  <span className="absolute -left-[7px] top-1 w-3 h-3 bg-indigo-500 rounded-full shadow-md" />
+                  <span className="absolute -left-[7px] top-1 w-3 h-3 bg-indigo-500 text-black rounded-full shadow-md" />
                   <div className="flex flex-col">
-                    <div className="text-sm text-gray-100">{a.message}</div>
+                    <div className="text-sm text-black">{a.message}</div>
                     <div className="flex items-center gap-3 mt-1 text-xs text-gray-400">
                       <span className="flex items-center gap-1">
                         <User className="w-3 h-3" />
