@@ -63,7 +63,7 @@ export default function Signup() {
               type={showPassword ? "text" : "password"}
               placeholder="••••••••"
               required
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition hover:cursor-pointer"
             />
 
             <button 
@@ -96,7 +96,7 @@ export default function Signup() {
 
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all"
+            className="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all hover:cursor-pointer"
           >
             Create Account
           </button>
