@@ -5,7 +5,7 @@ import TeamList from "../components/TeamList";
 import ProjectList from "../components/ProjectList";
 import ActivityFeed from "../components/ActivityFeed";
 import { AuthContext } from "../contexts/AuthContext";
-import { Plus, Settings } from "lucide-react";
+import {  Settings } from "lucide-react";
 
 export default function Dashboard() {
   const [teams, setTeams] = useState([]);
@@ -42,7 +42,7 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-gray-900 to-slate-900 text-gray-100 p-6">
+    <div className="min-h-screen bg-linear-to-br from-indigo-950 via-gray-900 to-slate-900 text-gray-100 p-6">
       {/* Header */}
       <header className="flex items-center justify-between mb-8">
         <div>
@@ -53,29 +53,14 @@ export default function Dashboard() {
             Manage your teams, projects, and activity — all in one place.
           </p>
         </div>
-        {/* <div className="flex items-center gap-4">
-          <Link
-            to="/teams/new"
-            className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm transition"
-          >
-            <Plus className="w-4 h-4" /> New Team
-          </Link>
-        </div> */}
+     
       </header>
 
-      {/* Grid Layout */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Teams Sidebar */}
         <div className="md:col-span-3">
           <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-lg border border-white/10 h-full">
             <h2 className="text-lg font-semibold mb-4 text-indigo-300 flex items-center justify-between">
               Teams
-              <Link
-                to="/teams"
-                className="text-xs text-gray-400 hover:text-indigo-400"
-              >
-                Manage
-              </Link>
             </h2>
             <TeamList
               teams={teams}

@@ -9,7 +9,6 @@ export default function ActivityFeed({ projectId, team }) {
 
   useEffect(() => {
     fetchActivity();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId, team]);
 
   async function fetchActivity() {
