@@ -12,6 +12,7 @@ export default function ProjectList({ projects, team, refresh }) {
   async function createProject(e) {
     e.preventDefault();
     if (!team) return alert("Select a team first");
+
     try {
       setLoading(true);
       await api.post("/projects", {
@@ -19,6 +20,7 @@ export default function ProjectList({ projects, team, refresh }) {
         description: desc,
         teamId: team._id,
       });
+
       setName("");
       setDesc("");
       refresh && refresh();
@@ -30,9 +32,10 @@ export default function ProjectList({ projects, team, refresh }) {
   }
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg">
+    <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-xl">
+
       {/* Header */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-6">
         <h4 className="text-lg font-semibold text-indigo-300 flex items-center gap-2">
           <Folder className="w-5 h-5" />
           Projects
@@ -40,29 +43,31 @@ export default function ProjectList({ projects, team, refresh }) {
         <span className="text-xs text-gray-400">{projects.length} total</span>
       </div>
 
-      {/* Create Project Form */}
+      {/* Create Project */}
       <form
         onSubmit={createProject}
-        className="flex flex-col sm:flex-row gap-2 mb-6"
+        className="space-y-3 bg-white/5 border border-white/10 p-4 rounded-xl mb-7"
       >
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
           placeholder="Project name"
-          className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+
         <input
           value={desc}
           onChange={(e) => setDesc(e.target.value)}
           placeholder="Short description"
-          className="flex-1 px-3 py-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          className="w-full px-3 py-2 bg-white/10 border border-white/20 rounded-lg text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+
         <button
           disabled={loading}
-          className="bg-indigo-600 hover:bg-indigo-700 hover:cursor-pointer text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 transition disabled:opacity-50"
         >
           <FolderPlus className="w-4 h-4" />
-          {loading ? "Creating..." : "New Project"}
+          {loading ? "Creating..." : "Create Project"}
         </button>
       </form>
 
@@ -73,16 +78,17 @@ export default function ProjectList({ projects, team, refresh }) {
             <motion.div
               key={p._id}
               layout
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
               whileHover={{ scale: 1.02 }}
-              className="flex items-center justify-between p-4 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition"
+              className="p-4 bg-white/5 border border-white/10 rounded-xl flex items-center justify-between hover:bg-white/10 transition"
             >
               <div>
-                <div className="font-medium text-gray-100">{p.name}</div>
+                <div className="font-semibold text-gray-100">{p.name}</div>
                 <div className="text-sm text-gray-400">{p.description}</div>
               </div>
+
               <Link
                 to={`/projects/${p._id}`}
                 className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
@@ -99,7 +105,7 @@ export default function ProjectList({ projects, team, refresh }) {
             animate={{ opacity: 1 }}
             className="text-sm text-gray-400 text-center py-4"
           >
-            No projects yet — create one above!
+            No projects yet — create one above
           </motion.div>
         )}
       </div>

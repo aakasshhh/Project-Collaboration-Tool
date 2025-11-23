@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Link } from "react-router-dom";
-import { Eye, EyeOff } from "lucide-react"; // 👁️ for password toggle
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const { login } = useContext(AuthContext);
@@ -19,16 +19,16 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-50 via-white to-indigo-100">
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-2xl shadow-xl border border-indigo-100 p-8 transition-all hover:shadow-2xl">
-        <h2 className="text-3xl font-bold text-center bg-linear-to-r from-indigo-600 to-indigo-400 bg-clip-text text-transparent mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-[#0D0C15] p-6">
+      <div className="w-full max-w-md bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl shadow-xl p-8">
+        <h2 className="text-3xl font-semibold text-center text-indigo-300 mb-6">
           Welcome back
         </h2>
 
         <form onSubmit={submit} className="space-y-5">
-          {/* EMAIL FIELD */}
+          {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm text-gray-300 mb-1">
               Email address
             </label>
             <input
@@ -37,15 +37,13 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
               required
-              className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
+              className="w-full p-3 bg-[#1B1925] border border-[#2A2A40] rounded-xl text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 outline-none"
             />
           </div>
 
-          {/* PASSWORD FIELD */}
+          {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
+            <label className="block text-sm text-gray-300 mb-1">Password</label>
             <div className="relative">
               <input
                 type={showPassword ? "text" : "password"}
@@ -53,33 +51,33 @@ export default function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
                 required
-                className="w-full p-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition pr-10"
+                className="w-full p-3 bg-[#1B1925] border border-[#2A2A40] rounded-xl text-gray-200 placeholder-gray-400 focus:ring-2 focus:ring-indigo-600 outline-none pr-10"
               />
+
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-3 flex items-center text-gray-500 hover:text-indigo-600 transition"
+                className="absolute inset-y-0 right-3 flex items-center text-gray-400 hover:text-indigo-400 transition"
               >
                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
               </button>
             </div>
           </div>
 
-          {/* SUBMIT BUTTON */}
+          {/* Submit */}
           <button
             type="submit"
-            className="w-full bg-gradient-to-r from-indigo-600 to-indigo-500 text-white font-semibold py-3 rounded-xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all"
+            className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-3 rounded-xl font-medium shadow-lg hover:shadow-xl hover:scale-[1.02] transition"
           >
             Sign in
           </button>
         </form>
 
-        {/* FOOTER LINK */}
-        <p className="text-center text-sm text-gray-600 mt-6">
+        <p className="text-center text-sm text-gray-400 mt-6">
           Don’t have an account?{" "}
           <Link
             to="/signup"
-            className="text-indigo-600 font-medium hover:underline"
+            className="text-indigo-400 hover:text-indigo-300 hover:underline"
           >
             Sign up
           </Link>

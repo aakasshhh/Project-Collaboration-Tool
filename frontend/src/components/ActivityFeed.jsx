@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import api from "../api/axios";
 import { motion, AnimatePresence } from "framer-motion";
-import { Clock, User, Activity } from "lucide-react";
+import { Clock, Activity } from "lucide-react";
 
 export default function ActivityFeed({ projectId, team }) {
   const [acts, setActs] = useState([]);
@@ -13,12 +13,9 @@ export default function ActivityFeed({ projectId, team }) {
 
   async function fetchActivity() {
     try {
-      const res = await api.get('/activity', { params: projectId ? { projectId } : {} });
+      const params = projectId ? { projectId } : {};
+      const res = await api.get("/activity", { params });
       setActs(res.data.slice(0, 10));
-      // const params = {};
-      // if (projectId) params.projectId = projectId;
-      // if (team?._id) params.teamId = team._id;
-      // const res = await api.get('/activity', { params });
     } catch (err) {
       console.error(err);
     } finally {
@@ -27,18 +24,44 @@ export default function ActivityFeed({ projectId, team }) {
   }
 
   return (
-    <div className="card">
-      <h4 className="font-semibold mb-2 bg-red-500 text-amber-50">Activity</h4>
-      <ul className="space-y-2 text-sm">
-        {acts.map(a => (
-          <li key={a._id} className="border-b pb-2">
-            <div className="text-xs text-gray-500">{new Date(a.createdAt).toLocaleString()}</div>
-            <div>{a.message}</div>
-            <div className="text-xs text-gray-400">{a.user?.name}</div>
-          </li>
-        ))}
-        {acts.length === 0 && <li className="text-xs text-gray-400">No recent activity</li>}
-      </ul>
+    <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-5 shadow-lg">
+      {/* Header */}
+      <div className="flex items-center gap-2 mb-4">
+        <Activity className="w-5 h-5 text-indigo-300" />
+        <h4 className="text-lg font-semibold text-indigo-300">Activity</h4>
+      </div>
+
+      {/* Activity List */}
+      <div className="space-y-3 text-sm">
+        <AnimatePresence>
+          {acts.map((a) => (
+            <motion.div
+              key={a._id}
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              className="border-b border-white/10 pb-2"
+            >
+              <div className="flex items-center gap-2 text-xs text-gray-400">
+                <Clock className="w-3 h-3" />
+                {new Date(a.createdAt).toLocaleString()}
+              </div>
+
+              <div className="text-gray-100 mt-1">{a.message}</div>
+
+              <div className="text-xs text-indigo-300 mt-1">
+                {a.user?.name || "Unknown user"}
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+
+        {!loading && acts.length === 0 && (
+          <div className="text-xs text-gray-400 text-center py-3">
+            No recent activity
+          </div>
+        )}
+      </div>
     </div>
   );
 }

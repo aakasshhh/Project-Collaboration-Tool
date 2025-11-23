@@ -19,7 +19,6 @@ export default function ProjectPage() {
   const [loading, setLoading] = useState(false);
   const [creating, setCreating] = useState(false);
 
-  // ─── Setup socket + fetch ─────────────────────────────────────
   useEffect(() => {
     fetchTasks();
 
@@ -40,7 +39,6 @@ export default function ProjectPage() {
     return () => s.disconnect();
   }, [projectId]);
 
-  // ─── Fetch Tasks ─────────────────────────────────────────────
   async function fetchTasks() {
     try {
       setLoading(true);
@@ -53,10 +51,10 @@ export default function ProjectPage() {
     }
   }
 
-  // ─── Create Task ─────────────────────────────────────────────
   async function createTask(e) {
     e.preventDefault();
     if (!title.trim()) return alert("Enter a title.");
+
     try {
       setCreating(true);
       await api.post("/tasks", {
@@ -66,6 +64,7 @@ export default function ProjectPage() {
         assignedUsers: [],
         dueDate,
       });
+
       setTitle("");
       setDesc("");
       setDueDate("");
@@ -77,50 +76,55 @@ export default function ProjectPage() {
     }
   }
 
-  // ─── UI ─────────────────────────────────────────────────────
   return (
-    <div className="min-h-screen bg-[#0D0C15] text-gray-200 p-6">
-      <div className="grid grid-cols-12 gap-6">
-        {/* LEFT SIDE - TASKS */}
-        <div className="col-span-8">
-          <div className="bg-[#13111C] border border-[#2A2A40] rounded-2xl p-6 shadow-md hover:shadow-lg transition-all duration-200">
-            <h2 className="text-xl font-semibold text-indigo-400 mb-6">
+    <div className="min-h-screen bg-linear-to-br from-indigo-950 via-gray-900 to-slate-900 text-gray-100 p-6">
+
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+        {/* Tasks Section */}
+        <div className="md:col-span-8">
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-white/10">
+
+            <h2 className="text-xl font-semibold text-indigo-300 mb-6">
               Tasks
             </h2>
 
-            {/* Form */}
+            {/* Create Task Form */}
             <form
               onSubmit={createTask}
-              className="grid grid-cols-3 gap-3 mb-6 items-end"
+              className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6"
             >
-              <div className="col-span-1">
-                <label className="text-sm text-gray-400">Title</label>
+              <div>
+                <label className="text-sm text-gray-300">Title</label>
                 <input
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  placeholder="Enter task title"
-                  className="w-full p-2 bg-[#1B1925] border border-[#2A2A40] rounded-lg text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-indigo-600 outline-none"
+                  placeholder="Task title"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/10 rounded-lg text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-              <div className="col-span-1">
-                <label className="text-sm text-gray-400">Description</label>
+
+              <div>
+                <label className="text-sm text-gray-300">Description</label>
                 <input
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
                   placeholder="Short description"
-                  className="w-full p-2 bg-[#1B1925] border border-[#2A2A40] rounded-lg text-gray-200 placeholder-gray-500 focus:ring-2 focus:ring-indigo-600 outline-none"
+                  className="w-full px-3 py-2 bg-white/10 border border-white/10 rounded-lg text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                 />
               </div>
-              <div className="flex gap-2">
+
+              <div className="flex gap-2 items-end">
                 <input
+                  type="date"
                   value={dueDate}
                   onChange={(e) => setDueDate(e.target.value)}
-                  type="date"
-                  className="p-2 bg-[#1B1925] border border-[#2A2A40] rounded-lg text-gray-200 focus:ring-2 focus:ring-indigo-600 outline-none"
+                  className="px-3 py-2 bg-white/10 border border-white/10 rounded-lg text-sm text-gray-100 focus:ring-2 focus:ring-indigo-500"
                 />
+
                 <button
                   disabled={creating}
-                  className="flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
+                  className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg transition disabled:opacity-50"
                 >
                   {creating ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
@@ -134,7 +138,7 @@ export default function ProjectPage() {
 
             {/* Task List */}
             {loading ? (
-              <div className="flex justify-center py-10 text-gray-500">
+              <div className="flex justify-center py-10 text-gray-400">
                 <Loader2 className="w-6 h-6 animate-spin" />
               </div>
             ) : tasks.length > 0 ? (
@@ -144,16 +148,19 @@ export default function ProjectPage() {
                 ))}
               </div>
             ) : (
-              <div className="text-sm text-gray-500 text-center py-6">
+              <div className="text-sm text-gray-400 text-center py-6">
                 No tasks yet
               </div>
             )}
           </div>
         </div>
 
-        {/* RIGHT SIDE - ACTIVITY FEED */}
-        <div className="col-span-4">
-          <div className="bg-[#13111C] border border-[#2A2A40] rounded-2xl shadow-md p-5">
+        {/* Activity Feed */}
+        <div className="md:col-span-4">
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10">
+            <h2 className="text-lg font-semibold mb-4 text-indigo-300">
+              Activity
+            </h2>
             <ActivityFeed projectId={projectId} />
           </div>
         </div>

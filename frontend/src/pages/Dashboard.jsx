@@ -5,7 +5,7 @@ import TeamList from "../components/TeamList";
 import ProjectList from "../components/ProjectList";
 import ActivityFeed from "../components/ActivityFeed";
 import { AuthContext } from "../contexts/AuthContext";
-import {  Settings } from "lucide-react";
+import { Settings, FolderOpen, Users, ClipboardList } from "lucide-react";
 
 export default function Dashboard() {
   const [teams, setTeams] = useState([]);
@@ -18,8 +18,11 @@ export default function Dashboard() {
   }, []);
 
   useEffect(() => {
-    if (selectedTeam) fetchProjects(selectedTeam._id);
-    else setProjects([]);
+    if (selectedTeam) {
+      fetchProjects(selectedTeam._id);
+    } else {
+      setProjects([]);
+    }
   }, [selectedTeam]);
 
   async function fetchTeams() {
@@ -42,26 +45,62 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-indigo-950 via-gray-900 to-slate-900 text-gray-100 p-6">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-950 via-gray-900 to-slate-900 text-gray-100 p-6">
+
       {/* Header */}
-      <header className="flex items-center justify-between mb-8">
-        <div>
-          <h1 className="text-2xl font-bold text-indigo-300">
-            Welcome back, {user?.name?.split(" ")[0] || "User"} 👋
-          </h1>
-          <p className="text-gray-400 text-sm">
-            Manage your teams, projects, and activity — all in one place.
-          </p>
-        </div>
-     
+      <header className="mb-10">
+        <h1 className="text-3xl font-bold text-indigo-300">
+          Welcome back, {user?.name?.split(" ")[0] || "User"} 👋
+        </h1>
+        <p className="text-gray-400 mt-1">
+          Here’s an overview of everything happening in your workspace.
+        </p>
       </header>
 
+      {/* Stats Section */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+        {[
+          {
+            label: "Teams",
+            value: teams.length,
+            icon: <Users size={26} className="text-indigo-300" />,
+          },
+          {
+            label: selectedTeam ? selectedTeam.name + " Projects" : "Projects",
+            value: projects.length,
+            icon: <FolderOpen size={26} className="text-indigo-300" />,
+          },
+          {
+            label: "Activity Items",
+            value: projects.length * 3 || 0, // placeholder
+            icon: <ClipboardList size={26} className="text-indigo-300" />,
+          },
+        ].map((item, i) => (
+          <div
+            key={i}
+            className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-6 shadow-lg hover:shadow-xl transition"
+          >
+            <div className="flex items-center gap-4">
+              <div className="p-3 bg-white/10 rounded-xl">{item.icon}</div>
+              <div>
+                <p className="text-gray-400 text-sm">{item.label}</p>
+                <p className="text-2xl font-bold text-indigo-300">{item.value}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Main Content Grid */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+
+        {/* Teams Sidebar */}
         <div className="md:col-span-3">
-          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-4 shadow-lg border border-white/10 h-full">
-            <h2 className="text-lg font-semibold mb-4 text-indigo-300 flex items-center justify-between">
-              Teams
-            </h2>
+          <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 h-full">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-indigo-300">Teams</h2>
+            </div>
+
             <TeamList
               teams={teams}
               onSelect={setSelectedTeam}
@@ -74,16 +113,19 @@ export default function Dashboard() {
         {/* Projects Section */}
         <div className="md:col-span-6">
           <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-lg border border-white/10 h-full">
+
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-lg font-semibold text-indigo-300">
                 {selectedTeam ? selectedTeam.name : "Select a Team"}
               </h3>
+
               {selectedTeam && (
                 <Link
                   to={`/teams/${selectedTeam._id}`}
                   className="text-sm text-indigo-400 hover:text-indigo-300 flex items-center gap-1"
                 >
-                  <Settings className="w-4 h-4" /> Manage
+                  <Settings size={16} />
+                  Manage
                 </Link>
               )}
             </div>
@@ -101,12 +143,14 @@ export default function Dashboard() {
         {/* Activity Feed */}
         <div className="md:col-span-3">
           <div className="bg-white/10 backdrop-blur-xl rounded-2xl p-5 shadow-lg border border-white/10 h-full">
-            <h2 className="text-lg font-semibold mb-4 text-indigo-300">
+            <h2 className="text-lg font-semibold text-indigo-300 mb-4">
               Activity
             </h2>
+
             <ActivityFeed team={selectedTeam} />
           </div>
         </div>
+
       </div>
     </div>
   );

@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import api from '../api/axios';
-import { Loader2 } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import api from "../api/axios";
+import { Loader2 } from "lucide-react";
 
 export default function TeamPage() {
   const { teamId } = useParams();
   const [team, setTeam] = useState(null);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
-  const [error, setError] = useState('');
-  const [identifiers, setIdentifiers] = useState('');
-  const [message, setMessage] = useState('');
+  const [error, setError] = useState("");
+  const [identifiers, setIdentifiers] = useState("");
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     fetchTeam();
@@ -18,13 +18,13 @@ export default function TeamPage() {
 
   async function fetchTeam() {
     setLoading(true);
-    setError('');
+    setError("");
     try {
-      const res = await api.get('/teams/mine');
-      const found = res.data.find(t => t._id === teamId);
+      const res = await api.get("/teams/mine");
+      const found = res.data.find((t) => t._id === teamId);
       setTeam(found || null);
     } catch (err) {
-      setError('Failed to fetch team. Please try again later.');
+      setError("Failed to fetch team. Try again later.");
     } finally {
       setLoading(false);
     }
@@ -35,35 +35,35 @@ export default function TeamPage() {
     if (!identifiers.trim()) return;
 
     const list = identifiers
-      .split(',')
-      .map(x => x.trim())
+      .split(",")
+      .map((x) => x.trim())
       .filter(Boolean);
 
     if (!list.length) {
-      setMessage('Please enter at least one valid email or username.');
+      setMessage("Enter at least one valid email or username.");
       return;
     }
 
     setAdding(true);
-    setMessage('');
+    setMessage("");
     try {
       const res = await api.post(`/teams/${teamId}/members`, { identifiers: list });
-      setMessage(res.data.message || '✅ Members added successfully!');
-      setIdentifiers('');
+      setMessage(res.data.message || "Members added successfully.");
+      setIdentifiers("");
       fetchTeam();
     } catch (err) {
-      setMessage(err.response?.data?.message || '❌ Failed to add member');
+      setMessage(err.response?.data?.message || "Failed to add member.");
     } finally {
       setAdding(false);
-      setTimeout(() => setMessage(''), 3000);
+      setTimeout(() => setMessage(""), 3000);
     }
   }
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64 text-gray-500">
+      <div className="flex items-center justify-center h-64 text-gray-400">
         <Loader2 className="animate-spin w-6 h-6 mr-2" />
-        Loading team details...
+        Loading team...
       </div>
     );
   }
@@ -73,51 +73,59 @@ export default function TeamPage() {
   }
 
   if (!team) {
-    return <div className="text-center text-gray-600 mt-10">Team not found.</div>;
+    return <div className="text-center text-gray-400 mt-10">Team not found.</div>;
   }
 
   return (
-    <div className="max-w-lg mx-auto bg-white shadow rounded-2xl p-6 mt-10">
-      <h2 className="text-2xl font-semibold text-indigo-700 mb-4">{team.name}</h2>
+    <div className="max-w-xl mx-auto mt-10 p-6 bg-white/10 border border-white/10 backdrop-blur-xl rounded-2xl shadow-xl text-gray-100">
 
-      <div className="mb-6">
-        <h3 className="font-medium text-gray-800 mb-2">Members</h3>
+      {/* Team Header */}
+      <h2 className="text-2xl font-bold text-indigo-300 mb-4">
+        {team.name}
+      </h2>
+
+      {/* Members List */}
+      <div className="mb-8">
+        <h3 className="font-semibold text-indigo-200 mb-2">Members</h3>
+
         {team.members.length > 0 ? (
-          <ul className="space-y-1">
-            {team.members.map(m => (
+          <ul className="divide-y divide-white/10">
+            {team.members.map((m) => (
               <li
                 key={m._id}
-                className="flex justify-between border-b border-gray-100 py-1 text-sm"
+                className="py-2 flex justify-between text-sm"
               >
                 <span className="font-medium">{m.name}</span>
-                <span className="text-gray-500">{m.email}</span>
+                <span className="text-gray-300">{m.email}</span>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-sm text-gray-500 italic">No members yet.</p>
+          <p className="text-sm text-gray-400 italic">No members yet.</p>
         )}
       </div>
 
-      <form onSubmit={addMember} className="flex flex-col gap-3">
+      {/* Add Member */}
+      <form onSubmit={addMember} className="space-y-3">
         <input
           type="text"
-          placeholder="Enter email(s) or username(s), comma-separated"
+          placeholder="Emails or usernames, comma-separated"
           value={identifiers}
-          onChange={e => setIdentifiers(e.target.value)}
-          className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          onChange={(e) => setIdentifiers(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg bg-white/10 border border-white/20 text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+
         <button
           type="submit"
           disabled={adding}
-          className="bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2 px-4 rounded-md transition"
+          className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2 rounded-lg transition"
         >
-          {adding ? 'Adding...' : 'Add Member'}
+          {adding ? "Adding..." : "Add Member"}
         </button>
       </form>
 
       {message && (
-        <div className="mt-4 text-center text-sm text-gray-700 bg-gray-50 border border-gray-200 rounded-md py-2">
+        <div className="mt-4 text-sm text-center py-2 rounded-md bg-white/10 border border-white/20">
           {message}
         </div>
       )}
