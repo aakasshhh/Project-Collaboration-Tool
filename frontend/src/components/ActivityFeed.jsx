@@ -10,12 +10,12 @@ export default function ActivityFeed({ projectId, team }) {
 
   async function fetch() {
     try {
-      // const res = await api.get('/activity', { params: projectId ? { projectId } : {} });
-      // setActs(res.data.slice(0, 10));
-      const params = {};
-      if (projectId) params.projectId = projectId;
-      if (team?._id) params.teamId = team._id;
-      const res = await api.get('/activity', { params });
+      const res = await api.get('/activity', { params: projectId ? { projectId } : {} });
+      setActs(res.data.slice(0, 10));
+      // const params = {};
+      // if (projectId) params.projectId = projectId;
+      // if (team?._id) params.teamId = team._id;
+      // const res = await api.get('/activity', { params });
     } catch (err) {
       console.error(err);
     }
@@ -23,7 +23,7 @@ export default function ActivityFeed({ projectId, team }) {
 
   return (
     <div className="card">
-      <h4 className="font-semibold mb-2 bg-red-500">Activity</h4>
+      <h4 className="font-semibold mb-2 bg-red-500 text-amber-50">Activity</h4>
       <ul className="space-y-2 text-sm">
         {acts.map(a => (
           <li key={a._id} className="border-b pb-2">
