@@ -1,43 +1,93 @@
-import React, { useContext, useState } from 'react';
-import api from '../api/axios';
-import { AuthContext } from '../contexts/AuthContext';
-import { Link } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
+import { AuthContext } from "../contexts/AuthContext";
+import api from "../api/axios";
+import { Users, PlusCircle } from "lucide-react";
 
 export default function TeamList({ teams, onSelect, selected, refresh }) {
   const { user } = useContext(AuthContext);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
+  const [loading, setLoading] = useState(false);
 
   async function createTeam(e) {
     e.preventDefault();
+    if (!name.trim()) return;
     try {
-      await api.post('/teams', { name });
-      setName('');
+      setLoading(true);
+      await api.post("/teams", { name });
+      setName("");
       refresh && refresh();
     } catch (err) {
-      alert(err.response?.data?.message || 'Failed to create team');
+      alert(err.response?.data?.message || "Failed to create team");
+    } finally {
+      setLoading(false);
     }
   }
 
   return (
-    <div className="card">
-      <h4 className="font-semibold mb-3">Teams</h4>
-      <div className="space-y-2">
-        {teams.map(t => (
-          <div key={t._id} className={`p-2 rounded cursor-pointer ${selected?._id === t._id ? 'bg-indigo-50' : 'hover:bg-gray-50'}`} onClick={()=>onSelect(t)}>
-            <div className="flex items-center justify-between">
-              <div>
-                <div className="text-sm font-medium">{t.name}</div>
-                <div className="text-xs text-gray-500">{t.members?.length || 0} members</div>
-              </div>
-              <Link to={`/teams/${t._id}`} className="text-xs text-indigo-600">Open</Link>
-            </div>
-          </div>
-        ))}
+    <div className="bg-white/10 backdrop-blur-xl border border-white/10 rounded-2xl p-6 shadow-lg">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
+        <h4 className="text-lg font-semibold text-indigo-300 flex items-center gap-2">
+          <Users className="w-5 h-5" /> Teams
+        </h4>
+        <span className="text-xs text-gray-400">{teams.length} total</span>
       </div>
 
-      <form onSubmit={createTeam} className="mt-4">
-        <input value={name} onChange={(e)=>setName(e.target.value)} placeholder="New team name" className="w-full p-2 border rounded mb-2" />
-        <button className="w-full bg-indigo-600 text-white py-1 rounded">Create team</button>
+      {/* Team List */}
+      <div className="space-y-2 mb-5">
+        <AnimatePresence>
+          {teams.map((t) => (
+            <motion.div
+              key={t._id}
+              layout
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              whileHover={{ scale: 1.02 }}
+              className={`p-3 rounded-lg cursor-pointer transition border ${
+                selected?._id === t._id
+                  ? "bg-indigo-600/30 border-indigo-400 text-white"
+                  : "bg-white/5 border-white/10 hover:bg-white/10 text-gray-200"
+              }`}
+              onClick={() => onSelect(t)}
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-sm font-medium">{t.name}</div>
+                  <div className="text-xs text-gray-400">
+                    {t.members?.length || 0} member
+                    {t.members?.length === 1 ? "" : "s"}
+                  </div>
+                </div>
+                <Link
+                  to={`/teams/${t._id}`}
+                  className="text-xs text-indigo-300 hover:text-indigo-400 transition"
+                >
+                  Open
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+
+      {/* Create Team Form */}
+      <form onSubmit={createTeam} className="space-y-2">
+        <input
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="New team name"
+          className="w-full p-2 bg-white/5 border border-white/10 rounded-lg text-sm text-gray-100 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        />
+        <button
+          disabled={loading}
+          className="w-full flex items-center justify-center gap-2 bg-indigo-600 hover:bg-indigo-700 hover:cursor-pointer text-white py-2 rounded-lg transition disabled:opacity-50"
+        >
+          <PlusCircle className="w-4 h-4" />
+          {loading ? "Creating..." : "Create Team"}
+        </button>
       </form>
     </div>
   );

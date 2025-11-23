@@ -1,14 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import api from '../api/axios';
+import React, { useEffect, useState } from "react";
+import api from "../api/axios";
+import { motion, AnimatePresence } from "framer-motion";
+import { Clock, User, Activity } from "lucide-react";
 
 export default function ActivityFeed({ projectId, team }) {
   const [acts, setActs] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch();
+    fetchActivity();
   }, [projectId, team]);
 
-  async function fetch() {
+  async function fetchActivity() {
     try {
       const res = await api.get('/activity', { params: projectId ? { projectId } : {} });
       setActs(res.data.slice(0, 10));
@@ -18,6 +21,8 @@ export default function ActivityFeed({ projectId, team }) {
       // const res = await api.get('/activity', { params });
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   }
 

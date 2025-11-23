@@ -5,6 +5,7 @@ import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import TeamPage from './pages/TeamPage';
 import ProjectPage from './pages/ProjectPage';
+import HomePage from './pages/HomePage';
 import { AuthContext } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 
@@ -15,9 +16,9 @@ function PrivateRoute({ children }) {
 }
 export default function App() {
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 ">
       <Navbar />
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto">
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
