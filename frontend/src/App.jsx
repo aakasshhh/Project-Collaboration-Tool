@@ -1,11 +1,13 @@
 import React, { useContext } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import Dashboard from './pages/Dashboard';
 import TeamPage from './pages/TeamPage';
 import ProjectPage from './pages/ProjectPage';
-import HomePage from './pages/HomePage'; // This will act as Landing Page
+import HomePage from './pages/HomePage';
+
 import { AuthContext } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
 
@@ -18,12 +20,13 @@ export default function App() {
   const { user } = useContext(AuthContext);
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-[#040b2c] via-[#0a0f2f] to-[#03071b]">
       <Navbar />
-      <div className="container mx-auto">
+
+      <div className="container mx-auto pt-20"> 
         <Routes>
 
-          {/* Landing Page */}
+          {/* Landing */}
           <Route
             path="/"
             element={
@@ -35,7 +38,7 @@ export default function App() {
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
           <Route path="/signup" element={!user ? <Signup /> : <Navigate to="/" />} />
 
-          {/* Authenticated Pages */}
+          {/* Protected */}
           <Route
             path="/dashboard"
             element={
@@ -62,6 +65,7 @@ export default function App() {
               </PrivateRoute>
             }
           />
+
         </Routes>
       </div>
     </div>

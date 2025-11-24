@@ -1,78 +1,80 @@
-import React, { useContext } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { LogOut, LayoutDashboard, User } from "lucide-react";
 
 export default function Navbar() {
   const { user, logout } = useContext(AuthContext);
-  const location = useLocation();
-
-  const isActive = (path) =>
-    location.pathname === path
-      ? "text-indigo-600 font-semibold"
-      : "text-gray-600 hover:text-gray-800";
+  const navigate = useNavigate();
 
   return (
-    <nav className="backdrop-blur-lg bg-white/60 border-b border-white/20 shadow-sm sticky top-0 z-40">
-      <div className="container mx-auto px-6 py-3 flex items-center justify-between">
+    <nav
+      className="
+        fixed top-0 left-0 right-0 z-50 
+        bg-black/20 backdrop-blur-xl
+        border-b border-indigo-900/40
+        px-6 py-3
+      "
+    >
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
 
         {/* Logo */}
-        <Link
-          to="/"
-          className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent tracking-tight"
+        <div
+          className="text-2xl font-semibold text-indigo-300 cursor-pointer hover:text-indigo-200 transition"
+          onClick={() => navigate("/")}
         >
           Collabify
-        </Link>
+        </div>
 
-        {/* Right Section */}
-        <div className="flex items-center gap-6">
-          {user ? (
+        {/* Right Buttons */}
+        <div className="flex items-center gap-4">
+
+          {/* When User Is NOT Logged In */}
+          {!user && (
             <>
-              {/* Greeting */}
-              <div className="hidden md:flex items-center gap-2 text-gray-700">
-                <User size={18} className="text-indigo-600" />
-                <span className="font-medium">
-                  {user.name.split(" ")[0]}
-                </span>
-              </div>
-
-              {/* Dashboard */}
-              <Link
-                to="/"
-                className={`flex items-center gap-1 text-sm px-3 py-1.5 rounded-md transition ${isActive("/")}`}
-              >
-                <LayoutDashboard size={16} />
-                Dashboard
-              </Link>
-
-              {/* Logout */}
-              <button
-                onClick={logout}
-                className="flex items-center gap-1 text-sm px-3 py-1.5 rounded-md bg-red-500/10 text-red-600 hover:bg-red-500/20 transition"
-              >
-                <LogOut size={16} />
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              {/* Login */}
               <Link
                 to="/login"
-                className={`text-sm px-3 py-1.5 rounded-md transition ${isActive("/login")}`}
+                className="
+                  text-indigo-200 px-4 py-2 rounded-lg
+                  hover:bg-indigo-900/30 transition
+                "
               >
                 Login
               </Link>
 
-              {/* Signup */}
               <Link
                 to="/signup"
-                className="text-sm px-4 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm transition"
+                className="
+                  px-4 py-2 rounded-lg 
+                  bg-indigo-600/90 hover:bg-indigo-500 
+                  text-white transition shadow-md shadow-indigo-600/20
+                "
               >
-                Sign up
+                Sign Up
               </Link>
             </>
           )}
+
+          {/* When User IS Logged In */}
+          {user && (
+            <>
+              <div className="text-indigo-200 text-sm opacity-90">
+                {user.name}
+              </div>
+
+              <button
+                onClick={logout}
+                className="
+                  px-4 py-2 rounded-lg 
+                  border border-indigo-800/40 
+                  bg-indigo-950/20 hover:bg-indigo-900/30 
+                  text-indigo-200 transition
+                "
+              >
+                Logout
+              </button>
+            </>
+          )}
+
         </div>
       </div>
     </nav>
